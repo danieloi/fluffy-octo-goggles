@@ -64,7 +64,7 @@
 
   <div class="flex">
     <div class="w-3/4 pr-4">
-      <Graph data={graphData} />
+      <Graph data={graphData} onNodeSelect={handleNodeSelect} />
     </div>
     <div class="w-1/4">
       <NodeDetails node={selectedNode} />

@@ -5,8 +5,10 @@
 
   let {
     data,
+    onNodeSelect,
   }: {
     data: { nodes: Node[]; edges: Edge[] };
+    onNodeSelect: (node: Node | null) => void;
   } = $props();
 
   let graphDiv: HTMLDivElement;
@@ -16,7 +18,7 @@
   $effect(() => {
     graphRendered = false;
     if (data) {
-      mermaidGraph = generateMermaidGraph(data.nodes, data.edges);
+      mermaidGraph = generateMermaidGraph(data.edges);
     }
   });
 
@@ -43,6 +45,23 @@
       const { svg } = await mermaid.render("graphDiv", mermaidGraph);
       graphDiv.innerHTML = svg;
       graphRendered = true;
+
+      graphDiv.querySelectorAll(".node rect").forEach((rect) => {
+        rect.addEventListener("click", (event) => {
+          const nodeElement = (event.target as SVGElement).closest(".node");
+          if (nodeElement) {
+            const nodeId = nodeElement.id;
+            console.log({ nodeId });
+            // Extract the actual node name from the Mermaid-generated ID
+            const nodeName = nodeId.split("-")[1];
+            if (nodeName) {
+              onNodeSelect(
+                data.nodes.find((n) => n.node_name === nodeName) || null
+              );
+            }
+          }
+        });
+      });
     } catch (error) {
       console.error("Error rendering graph:", error);
     }
