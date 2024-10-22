@@ -1,15 +1,20 @@
 <script lang="ts">
-  import { getNodes, getUpstreamDependencies } from "$lib/mockBackend";
-  import type { Node, Edge, D3Node } from "$lib/mockBackend";
+  import {
+    getNodes,
+    getEdges,
+    getUpstreamDependencies,
+  } from "$lib/mockBackend";
+  import type { Node, Edge } from "$lib/mockBackend";
   import AutoComplete from "./AutoComplete.svelte";
   import Graph from "./Graph.svelte";
   import NodeDetails from "./NodeDetails.svelte";
 
-  const nodes = $state(getNodes());
+  let nodes = $state(getNodes());
+  let edges = $state(getEdges());
   let selectedNode = $state<Node | null>(null);
-  let graphData = $state<{ nodes: D3Node[]; edges: Edge[] }>({
-    nodes: [],
-    edges: [],
+  let graphData = $state<{ nodes: Node[]; edges: Edge[] }>({
+    nodes: nodes,
+    edges: edges,
   });
   let depth = $state(Infinity);
 
@@ -17,19 +22,18 @@
     if (selectedNode) {
       const data = getUpstreamDependencies(selectedNode.node_name, depth);
       graphData = {
-        nodes: data.nodes.map((node) => ({
-          ...node,
-          x: 0,
-          y: 0,
-          fx: null,
-          fy: null,
-        })),
+        nodes: data.nodes,
         edges: data.edges,
+      };
+    } else {
+      graphData = {
+        nodes: nodes,
+        edges: edges,
       };
     }
   });
 
-  function handleNodeSelect(node: Node) {
+  function handleNodeSelect(node: Node | null) {
     selectedNode = node;
   }
 
@@ -43,7 +47,7 @@
   <h1 class="text-3xl font-bold mb-4">DAG Visualizer</h1>
 
   <div class="mb-4">
-    <AutoComplete {nodes} onSelect={(e) => handleNodeSelect(e)} />
+    <AutoComplete {nodes} onSelect={handleNodeSelect} />
   </div>
 
   <div class="mb-4">
@@ -60,7 +64,7 @@
 
   <div class="flex">
     <div class="w-3/4 pr-4">
-      <Graph data={graphData} onNodeClick={(e) => handleNodeSelect(e)} />
+      <Graph data={graphData} />
     </div>
     <div class="w-1/4">
       <NodeDetails node={selectedNode} />

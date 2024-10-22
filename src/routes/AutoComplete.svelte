@@ -4,8 +4,10 @@
   let searchTerm = $state("");
   let filteredNodes = $state<Node[]>([]);
 
-  const { nodes, onSelect }: { nodes: Node[]; onSelect: (node: Node) => void } =
-    $props();
+  const {
+    nodes,
+    onSelect,
+  }: { nodes: Node[]; onSelect: (node: Node | null) => void } = $props();
 
   $effect(() => {
     filteredNodes = nodes.filter((node) =>
@@ -20,12 +22,23 @@
 </script>
 
 <div class="relative">
-  <input
-    type="text"
-    bind:value={searchTerm}
-    placeholder="Search nodes..."
-    class="w-full px-4 py-2 border rounded"
-  />
+  <div class="flex">
+    <input
+      type="text"
+      bind:value={searchTerm}
+      placeholder="Search nodes..."
+      class="w-full px-4 py-2 border rounded-l"
+    />
+    <button
+      class="px-4 py-2 bg-gray-200 rounded-r"
+      onclick={() => {
+        searchTerm = "";
+        onSelect(null);
+      }}
+    >
+      Clear
+    </button>
+  </div>
   {#if searchTerm && filteredNodes.length > 0}
     <ul class="absolute z-10 w-full bg-white border rounded mt-1">
       {#each filteredNodes as node}

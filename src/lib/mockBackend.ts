@@ -4,14 +4,6 @@ export interface Node {
   tags: string[];
 }
 
-// Extend the Node type
-export type D3Node = Node & {
-  fx: number | null;
-  fy: number | null;
-  x: number;
-  y: number;
-};
-
 export interface Edge {
   from: string;
   to: string;
@@ -78,4 +70,12 @@ export function getUpstreamDependencies(
   }
 
   return result;
+}
+
+export function generateMermaidGraph(nodes: Node[], edges: Edge[]): string {
+  let mermaidCode = "graph LR\n";
+  edges.forEach((edge) => {
+    mermaidCode += `    ${edge.from} --> ${edge.to}\n`;
+  });
+  return mermaidCode;
 }
