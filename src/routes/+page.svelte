@@ -61,23 +61,23 @@
     />
   </div>
 
-  <div class="mb-4">
-    <label for="depth" class="mr-2">Depth limit:</label>
+  <div class="mb-4 flex flex-wrap items-center">
+    <label for="depth" class="mr-2 mb-2 sm:mb-0">Depth limit:</label>
     <input
       type="number"
       id="depth"
       min="1"
       value={depth === Infinity ? "" : depth}
       oninput={handleDepthChange}
-      class="border rounded px-2 py-1"
+      class="border rounded px-2 py-1 w-full sm:w-auto"
     />
   </div>
 
-  <div class="flex">
-    <div class="w-3/4 pr-4">
+  <div class="flex flex-col lg:flex-row">
+    <div class="w-full lg:w-3/4 lg:pr-4 mb-4 lg:mb-0">
       <Graph data={graphData} onNodeSelect={handleNodeSelect} />
     </div>
-    <div class="w-1/4">
+    <div class="w-full lg:w-1/4">
       <NodeDetails node={selectedNode} />
     </div>
   </div>
