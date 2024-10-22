@@ -55,6 +55,15 @@ export function getUpstreamDependencies(
   ];
   const visited = new Set<string>();
 
+  // Pre-compute a map of incoming edges for faster lookup
+  const incomingEdgesMap = new Map<string, Edge[]>();
+  for (const edge of edges) {
+    if (!incomingEdgesMap.has(edge.to)) {
+      incomingEdgesMap.set(edge.to, []);
+    }
+    incomingEdgesMap.get(edge.to)!.push(edge);
+  }
+
   while (queue.length > 0) {
     const { name, currentDepth } = queue.shift()!;
     if (visited.has(name) || currentDepth >= depth) continue;
@@ -63,16 +72,21 @@ export function getUpstreamDependencies(
     const node = getNodeByName(name);
     if (node) result.nodes.push(node);
 
-    const incomingEdges = edges.filter((edge) => edge.to === name);
+    // Use the pre-computed map for faster edge lookup
+    const incomingEdges = incomingEdgesMap.get(name) || [];
     result.edges.push(...incomingEdges);
 
-    for (const edge of incomingEdges) {
-      queue.push({ name: edge.from, currentDepth: currentDepth + 1 });
+    if (currentDepth + 1 < depth) {
+      for (const edge of incomingEdges) {
+        queue.push({ name: edge.from, currentDepth: currentDepth + 1 });
+      }
     }
   }
 
-  if (depth == 0) {
-    result.nodes.push(getNodeByName(nodeName)!);
+  // Handle the special case for depth 0
+  if (depth === 0) {
+    result.nodes = [getNodeByName(nodeName)!];
+    result.edges = [];
   }
 
   return result;
