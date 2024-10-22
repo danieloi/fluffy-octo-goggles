@@ -14,12 +14,24 @@
   let graphDiv: HTMLDivElement;
   let graphRendered = $state(false);
   let mermaidGraph = $state("");
+  let showLoading = $state(false);
 
   $effect(() => {
     graphRendered = false;
+    showLoading = false;
     if (data) {
       mermaidGraph = generateMermaidGraph(data.nodes, data.edges);
       $inspect(mermaidGraph);
+
+      // Set a timeout to show loading after 1 second
+      const loadingTimeout = setTimeout(() => {
+        if (!graphRendered) {
+          showLoading = true;
+        }
+      }, 1000);
+
+      // Clean up the timeout if the effect runs again
+      return () => clearTimeout(loadingTimeout);
     }
   });
 
@@ -69,7 +81,7 @@
   }
 </script>
 
-{#if !graphRendered}
+{#if showLoading && !graphRendered}
   <div>Loading graph...</div>
 {/if}
 
