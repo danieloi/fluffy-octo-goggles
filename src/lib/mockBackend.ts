@@ -72,10 +72,18 @@ export function getUpstreamDependencies(
   return result;
 }
 
-export function generateMermaidGraph(edges: Edge[]): string {
+export function generateMermaidGraph(nodes: Node[], edges: Edge[]): string {
   let mermaidCode = "graph LR\n";
-  edges.forEach((edge) => {
-    mermaidCode += `    ${edge.from}[${edge.from}] --> ${edge.to}[${edge.to}]\n`;
-  });
+
+  if (edges.length === 0) {
+    nodes.forEach((node) => {
+      mermaidCode += `    ${node.node_name}[${node.node_name}]\n`;
+    });
+  } else {
+    edges.forEach((edge) => {
+      mermaidCode += `    ${edge.from}[${edge.from}] --> ${edge.to}[${edge.to}]\n`;
+    });
+  }
+
   return mermaidCode;
 }

@@ -20,11 +20,13 @@
 
   $effect(() => {
     if (selectedNode) {
+      $inspect(selectedNode);
       const data = getUpstreamDependencies(selectedNode.node_name, depth);
       graphData = {
         nodes: data.nodes,
         edges: data.edges,
       };
+      $inspect(graphData);
     } else {
       graphData = {
         nodes: nodes,

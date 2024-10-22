@@ -18,7 +18,8 @@
   $effect(() => {
     graphRendered = false;
     if (data) {
-      mermaidGraph = generateMermaidGraph(data.edges);
+      mermaidGraph = generateMermaidGraph(data.nodes, data.edges);
+      $inspect(mermaidGraph);
     }
   });
 
