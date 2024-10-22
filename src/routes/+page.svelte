@@ -49,7 +49,7 @@
   <h1 class="text-3xl font-bold mb-4">DAG Visualizer</h1>
 
   <div class="mb-4">
-    <AutoComplete {nodes} onSelect={handleNodeSelect} />
+    <AutoComplete {nodes} onSelect={handleNodeSelect} {selectedNode} />
   </div>
 
   <div class="mb-4">

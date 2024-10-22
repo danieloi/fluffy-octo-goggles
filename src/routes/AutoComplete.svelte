@@ -3,11 +3,17 @@
 
   let searchTerm = $state("");
   let filteredNodes = $state<Node[]>([]);
+  let isNodeSelected = $state(false);
 
   const {
     nodes,
     onSelect,
-  }: { nodes: Node[]; onSelect: (node: Node | null) => void } = $props();
+    selectedNode,
+  }: {
+    nodes: Node[];
+    onSelect: (node: Node | null) => void;
+    selectedNode: Node | null;
+  } = $props();
 
   $effect(() => {
     filteredNodes = nodes.filter((node) =>
@@ -15,9 +21,21 @@
     );
   });
 
+  $effect(() => {
+    if (selectedNode) {
+      searchTerm = selectedNode.node_name;
+      isNodeSelected = true;
+    }
+  });
+
   function handleSelect(node: Node) {
     searchTerm = node.node_name;
+    isNodeSelected = true;
     onSelect(node);
+  }
+
+  function handleInput() {
+    isNodeSelected = false;
   }
 </script>
 
@@ -26,6 +44,7 @@
     <input
       type="text"
       bind:value={searchTerm}
+      oninput={handleInput}
       placeholder="Search nodes..."
       class="w-full px-4 py-2 border rounded-l"
     />
@@ -33,13 +52,14 @@
       class="px-4 py-2 bg-gray-200 rounded-r"
       onclick={() => {
         searchTerm = "";
+        isNodeSelected = false;
         onSelect(null);
       }}
     >
       Clear
     </button>
   </div>
-  {#if searchTerm && filteredNodes.length > 0}
+  {#if searchTerm && filteredNodes.length > 0 && !isNodeSelected}
     <ul class="absolute z-10 w-full bg-white border rounded mt-1">
       {#each filteredNodes as node}
         <button
