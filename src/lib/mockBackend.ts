@@ -50,12 +50,14 @@ export function getUpstreamDependencies(
   depth: number = Infinity
 ): { nodes: Node[]; edges: Edge[] } {
   const result: { nodes: Node[]; edges: Edge[] } = { nodes: [], edges: [] };
-  const queue: { name: string; depth: number }[] = [{ name: nodeName, depth }];
+  const queue: { name: string; currentDepth: number }[] = [
+    { name: nodeName, currentDepth: 0 },
+  ];
   const visited = new Set<string>();
 
   while (queue.length > 0) {
-    const { name, depth } = queue.shift()!;
-    if (visited.has(name) || depth < 0) continue;
+    const { name, currentDepth } = queue.shift()!;
+    if (visited.has(name) || currentDepth >= depth) continue;
     visited.add(name);
 
     const node = getNodeByName(name);
@@ -65,8 +67,12 @@ export function getUpstreamDependencies(
     result.edges.push(...incomingEdges);
 
     for (const edge of incomingEdges) {
-      queue.push({ name: edge.from, depth: depth - 1 });
+      queue.push({ name: edge.from, currentDepth: currentDepth + 1 });
     }
+  }
+
+  if (depth == 0) {
+    result.nodes.push(getNodeByName(nodeName)!);
   }
 
   return result;

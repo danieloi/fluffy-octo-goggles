@@ -43,13 +43,22 @@
     const value = parseInt((event.target as HTMLInputElement).value);
     depth = isNaN(value) ? Infinity : value;
   }
+
+  function clearDepth() {
+    depth = Infinity;
+  }
 </script>
 
 <main class="container mx-auto p-4">
   <h1 class="text-3xl font-bold mb-4">DAG Visualizer</h1>
 
   <div class="mb-4">
-    <AutoComplete {nodes} onSelect={handleNodeSelect} {selectedNode} />
+    <AutoComplete
+      {nodes}
+      onNodeSelect={handleNodeSelect}
+      {selectedNode}
+      onClear={clearDepth}
+    />
   </div>
 
   <div class="mb-4">

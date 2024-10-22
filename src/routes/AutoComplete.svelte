@@ -7,12 +7,14 @@
 
   const {
     nodes,
-    onSelect,
+    onNodeSelect,
     selectedNode,
+    onClear,
   }: {
     nodes: Node[];
-    onSelect: (node: Node | null) => void;
+    onNodeSelect: (node: Node | null) => void;
     selectedNode: Node | null;
+    onClear: () => void;
   } = $props();
 
   $effect(() => {
@@ -31,7 +33,7 @@
   function handleSelect(node: Node) {
     searchTerm = node.node_name;
     isNodeSelected = true;
-    onSelect(node);
+    onNodeSelect(node);
   }
 
   function handleInput() {
@@ -53,7 +55,8 @@
       onclick={() => {
         searchTerm = "";
         isNodeSelected = false;
-        onSelect(null);
+        onNodeSelect(null);
+        onClear();
       }}
     >
       Clear
