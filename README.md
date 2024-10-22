@@ -35,4 +35,4 @@ You can preview the production build with `npm run preview`.
 ## Future Improvements
 
 - Add tests
-- Add more animations/reduce ui jank
+- Add more animations/reduce ui jank when a node is selected
