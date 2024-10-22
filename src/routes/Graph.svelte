@@ -10,16 +10,25 @@
   } = $props();
 
   let graphDiv: HTMLDivElement;
+  let graphRendered = $state(false);
+  let mermaidGraph = $state("");
 
   $effect(() => {
-    // if (graphDiv) {
-    renderGraph();
-    // }
+    graphRendered = false;
+    if (data) {
+      mermaidGraph = generateMermaidGraph(data.nodes, data.edges);
+    }
+  });
+
+  $effect(() => {
+    if (graphDiv && mermaidGraph && !graphRendered) {
+      renderGraph();
+    }
   });
 
   async function renderGraph() {
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       securityLevel: "loose",
       theme: "neutral",
       flowchart: {
@@ -29,13 +38,26 @@
         padding: 15,
       },
     });
-    const mermaidGraph = generateMermaidGraph(data.nodes, data.edges);
-    const { svg } = await mermaid.render("graphDiv", mermaidGraph);
-    graphDiv.innerHTML = svg;
+
+    try {
+      const { svg } = await mermaid.render("graphDiv", mermaidGraph);
+      graphDiv.innerHTML = svg;
+      graphRendered = true;
+    } catch (error) {
+      console.error("Error rendering graph:", error);
+    }
   }
 </script>
 
-<div bind:this={graphDiv} class="w-full h-full overflow-auto"></div>
+{#if !graphRendered}
+  <div>Loading graph...</div>
+{/if}
+
+<div
+  bind:this={graphDiv}
+  class="w-full h-full overflow-auto"
+  style:display={graphRendered ? "block" : "none"}
+></div>
 
 <style>
   :global(.node:hover) {
