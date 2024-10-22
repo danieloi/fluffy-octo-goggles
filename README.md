@@ -1,18 +1,8 @@
-# create-svelte
+# Zipline Takehome
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## Quick Walkthrough Video
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
+[![YouTube Video Thumbnail](https://img.youtube.com/vi/G20QpKsPiug/0.jpg)](https://www.youtube.com/watch?v=G20QpKsPiug)
 
 ## Developing
 

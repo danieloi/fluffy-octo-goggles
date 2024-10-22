@@ -64,7 +64,6 @@
           const nodeElement = (event.target as SVGElement).closest(".node");
           if (nodeElement) {
             const nodeId = nodeElement.id;
-            console.log({ nodeId });
             // Extract the actual node name from the Mermaid-generated ID
             const nodeName = nodeId.split("-")[1];
             if (nodeName) {
