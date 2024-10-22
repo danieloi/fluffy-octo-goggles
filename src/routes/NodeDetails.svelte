@@ -10,11 +10,14 @@
     <p class="mb-2"><strong>Type:</strong> {node.node_type}</p>
     <div>
       <strong>Tags:</strong>
-      <ul class="list-disc list-inside">
+      <div class="mt-2 flex flex-wrap gap-2">
         {#each node.tags as tag}
-          <li>{tag}</li>
+          <span
+            class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded"
+            >{tag}</span
+          >
         {/each}
-      </ul>
+      </div>
     </div>
   </div>
 {:else}
