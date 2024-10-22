@@ -51,7 +51,7 @@
       class="w-full px-4 py-2 border rounded-l"
     />
     <button
-      class="px-4 py-2 bg-gray-200 rounded-r"
+      class="px-4 py-2 bg-gray-200 rounded-r hover:bg-gray-300 hover:text-gray-800"
       onclick={() => {
         searchTerm = "";
         isNodeSelected = false;

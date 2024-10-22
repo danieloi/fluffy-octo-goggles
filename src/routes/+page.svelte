@@ -66,7 +66,7 @@
     <input
       type="number"
       id="depth"
-      min="1"
+      min="0"
       value={depth === Infinity ? "" : depth}
       oninput={handleDepthChange}
       class="border rounded px-2 py-1 w-full sm:w-auto"

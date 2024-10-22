@@ -13,7 +13,7 @@
       <div class="mt-2 flex flex-wrap gap-2">
         {#each node.tags as tag}
           <span
-            class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded"
+            class="bg-gray-200 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded"
             >{tag}</span
           >
         {/each}
